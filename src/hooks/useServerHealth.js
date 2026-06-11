@@ -21,10 +21,11 @@ export function useServerHealth(pollMs = 60_000) {
       const started = performance.now();
       try {
         // Replace with your real endpoint. We use menu.json as a stand-in.
-        const res = await fetch('/menu.json', {
-          signal: controller.signal,
-          cache: 'no-store'
-        });
+        const res = await fetch('http://localhost:4000/api/health', {
+  signal: controller.signal,
+  cache: 'no-store'
+});
+
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         if (cancelled) return;
         setHealth({

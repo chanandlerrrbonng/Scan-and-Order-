@@ -1,8 +1,9 @@
+const API_BASE = 'http://localhost:4000/api';
 const CACHE_KEY = 'noqs:menuCache:v2';
 
 export async function fetchMenu({ signal } = {}) {
   try {
-    const res = await fetch('/menu.json', { cache: 'no-cache', signal });
+    const res = await fetch(`${API_BASE}/menu`, { cache: 'no-cache', signal });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (!Array.isArray(data)) throw new Error('Malformed payload');

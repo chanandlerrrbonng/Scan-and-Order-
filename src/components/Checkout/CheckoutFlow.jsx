@@ -50,11 +50,30 @@ export default function CheckoutFlow({ onExit, onDone }) {
     };
   }, [state.placedOrderId]);
 
-  function placeOrder() {
-    const id = 'NOQS-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-    dispatch({ type: 'PLACED', id });
-    // Simulate network call here in a real app
+  async function placeOrder() {
+  try {
+    const res = await fetch('http://localhost:4000/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customer: state.details,
+        tableId: 'T07',
+        items,
+        totals,
+        promoCode: undefined
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert((data.details || [data.message]).join('\n'));
+      return;
+    }
+    dispatch({ type: 'PLACED', id: data.id });
+  } catch (err) {
+    alert('Could not reach the kitchen. Please try again.');
   }
+}
+
 
   function finish() {
     clearCart();
